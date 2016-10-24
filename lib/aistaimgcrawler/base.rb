@@ -1,7 +1,9 @@
 require 'mechanize'
 
-module Crawler
+module Aistaimgcrawler
   class Base
+    STORY_URL = 'http://www.aikatsu.net/story/' # official
+
     def initialize logger, img_dir
       @logger    = logger
       @dir       = img_dir
@@ -15,13 +17,8 @@ module Crawler
       raise NotImplementedError.new("You must implement #{self.class}##{__method__}")
     end
 
-    def get_episode_title page
-      raise NotImplementedError.new("You must implement #{self.class}##{__method__}")
-    end
-
     def get_episode_title ep
-      base_url = 'http://www.aikatsu.net/story/' # official
-      url = base_url + ("%03d" % ep) + ".html"
+      url = STORY_URL + ("%03d" % ep) + ".html"
       begin
         page = @mech.get(url)
       rescue Mechanize::ResponseCodeError => e
