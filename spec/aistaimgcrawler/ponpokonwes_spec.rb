@@ -73,7 +73,6 @@ describe Aistaimgcrawler::Base do
 
   describe '#get_img_resources' do
     context 'with existed episode' do
-
       let(:resources) { Aistaimgcrawler::Ponpokonwes.new.get_img_resources(28) }
 
       it 'should be array' do
@@ -82,6 +81,14 @@ describe Aistaimgcrawler::Base do
 
       it 'should not be empty' do
         expect(resources).to_not be_empty
+      end
+    end
+
+    context 'with non-existed episode' do
+      let(:resources) { Aistaimgcrawler::Ponpokonwes.new.get_img_resources(99) }
+
+      it 'should be nil' do
+        expect(resources).to be_nil
       end
     end
   end
@@ -96,7 +103,7 @@ describe Aistaimgcrawler::Base do
       let(:ep) { 28 }
       let(:succ) {
         Aistaimgcrawler::Ponpokonwes.new(
-          Logger.new(STDOUT), SPEC_DIR+'img/'
+          Logger.new('/dev/null'), SPEC_DIR+'img/'
         ).get_imgs(ep)
       }
 
@@ -108,11 +115,28 @@ describe Aistaimgcrawler::Base do
         expect(succ.size).to be_eql 2
       end
 
-      it 'should save image' do
+      it 'should save two images' do
         (1..2).each do |i|
           e = File.exists?(SPEC_DIR+'img/'+("%03d" % ep)+'/00'+i.to_s+'.jpg')
           expect(e).to be_eql true
         end
+      end
+    end
+
+    context 'with non-existed episode' do
+      let(:ep) { 99 }
+      let(:succ) {
+        Aistaimgcrawler::Ponpokonwes.new(
+          Logger.new('/dev/null'), SPEC_DIR+'img/'
+        ).get_imgs(ep)
+      }
+
+      it 'should be array' do
+        expect(succ).to be_a Array
+      end
+
+      it 'should be empty' do
+        expect(succ).to be_empty
       end
     end
   end
