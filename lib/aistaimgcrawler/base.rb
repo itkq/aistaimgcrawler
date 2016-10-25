@@ -42,32 +42,33 @@ module Aistaimgcrawler
       end
     end
 
-    def get_img_resources page
-      thumb_res = get_thumbnail_resources(page)
-      return nil unless url
+    def get_img_resources ep
+      thumb_res = get_thumbnail_resources(ep)
+      return nil unless thumb_res
       thumb_res.map{|r| r.gsub(/-s\.jpg$/, ".jpg") }
     end
 
-    def get_thumbnail_resources ep
-      url = get_article_url_by_episode
+    def get_thumbnail_resources ep, include_url=''
+      url = get_article_url_by_episode(ep)
       return nil unless url
 
       page = @mech.get(url)
       body = page.search('div.article-body')
       body.css('img').map{|img|
         url = img.attr('src')
-        if (!url.index('images-amazon'))
+        next if (url.index('images-amazon'))
+        unless include_url.empty?
+          url if url.index(include_url)
+        else
           url
         end
       }.compact
     end
 
-    def get_imgs url, thumb_flg=false
-      @logger.info url
-      page = @mech.get(url)
-      resources = get_img_resources(page)
+    def get_imgs ep, thumb_flg=false
+      resources = get_img_resources(ep)
+      return [] unless resources
 
-      ep = get_episode(page)
       @logger.info "get image from episode #{ep}"
       @logger.info "#{resources.size} images"
       format = "%03d.jpg"
@@ -76,7 +77,7 @@ module Aistaimgcrawler
 
       @logger.info dirname
       unless File.exists?(dirname)
-        FileUtils.mkdir(dirname)
+        FileUtils.mkdir_p(dirname)
       end
 
       if thumb_flg
@@ -102,6 +103,18 @@ module Aistaimgcrawler
       end
 
       succ
+    end
+
+    def save_img path, url
+      begin
+        @mech.get(url).save_as(path)
+      rescue => e
+        @logger.warn e.message
+        return false
+      end
+
+      @logger.info "#{url} ==> finished"
+      true
     end
   end
 end

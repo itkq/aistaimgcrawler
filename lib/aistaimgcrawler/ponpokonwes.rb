@@ -21,6 +21,11 @@ module Aistaimgcrawler
       }.compact
       Hash[*articles.flatten]
     end
+
+    def get_thumbnail_resources ep
+      super(ep, 'livedoor.blogimg.jp/ponpokonwes')
+    end
+
   end
 end
 
