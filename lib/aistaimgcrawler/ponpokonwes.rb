@@ -2,14 +2,15 @@ require 'aistaimgcrawler/base'
 
 module Aistaimgcrawler
   class Ponpokonwes < Aistaimgcrawler::Base
-    INDEX_URL = 'http://ponpokonwes.blog.jp/archives/cat_888546.html'
+    attr_accessor :index_url
 
     def initialize logger=$STDOUT, img_dir='./img/'
       super logger, img_dir
+      @index_url = 'http://ponpokonwes.blog.jp/archives/cat_888546.html'
     end
 
-    def get_articles page=1
-      page = @mech.get INDEX_URL+"?p=#{page}"
+    def get_articles p=1
+      page = @mech.get @index_url+"?p=#{p}"
 
       articles = page.search('.article-title').map{|at|
         matched = at.css('a').text.match(/第(\d+)話/)
