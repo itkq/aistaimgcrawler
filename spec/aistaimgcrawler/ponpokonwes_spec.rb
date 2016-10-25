@@ -1,9 +1,9 @@
 require 'spec_helper'
 require 'webmock/rspec'
 
-IMG_LIST_28_URL = 'http://ponpokonwes.blog.jp/archives/66727377.html'
-IMG_1_URL = 'http://livedoor.blogimg.jp/ponpokonwes/imgs/7/0/70788bdd.jpg'
-IMG_2_URL = 'http://livedoor.blogimg.jp/ponpokonwes/imgs/d/3/d3e71576.jpg'
+PONPOKO_IMG_LIST_28_URL = 'http://ponpokonwes.blog.jp/archives/66727377.html'
+PONPOKO_IMG_1_URL = 'http://livedoor.blogimg.jp/ponpokonwes/imgs/7/0/70788bdd.jpg'
+PONPOKO_IMG_2_URL = 'http://livedoor.blogimg.jp/ponpokonwes/imgs/d/3/d3e71576.jpg'
 
 describe Aistaimgcrawler::Ponpokonwes do
   before(:each) do
@@ -23,16 +23,16 @@ describe Aistaimgcrawler::Ponpokonwes do
       :headers => {content_type: 'text/html'},
       :body => File.read(SPEC_DIR+'ponpokonwes_html/3.html'),
     })
-    stub_request(:get, IMG_LIST_28_URL).to_return({
+    stub_request(:get, PONPOKO_IMG_LIST_28_URL).to_return({
       :status => 200,
       :headers => {content_type: 'text/html'},
       :body => File.read(SPEC_DIR+'ponpokonwes_html/img28.html'),
     })
-    stub_request(:get, IMG_1_URL).to_return({
+    stub_request(:get, PONPOKO_IMG_1_URL).to_return({
       :status => 200,
       :body => File.read(SPEC_DIR+'ponpokonwes_html/img1.jpg'),
     })
-    stub_request(:get, IMG_2_URL).to_return({
+    stub_request(:get, PONPOKO_IMG_2_URL).to_return({
       :status => 200,
       :body => File.read(SPEC_DIR+'ponpokonwes_html/img2.jpg'),
     })

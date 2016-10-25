@@ -1,9 +1,9 @@
 require 'spec_helper'
 require 'webmock/rspec'
 
-IMG_LIST_14_URL = 'http://aikatunews.livedoor.biz/archives/63023672.html'
-IMG_1_URL = 'http://livedoor.blogimg.jp/aikatunews/imgs/9/9/991fe707.jpg'
-IMG_2_URL = 'http://livedoor.blogimg.jp/aikatunews/imgs/f/6/f6695505.jpg'
+AIKATU_IMG_LIST_14_URL = 'http://aikatunews.livedoor.biz/archives/63023672.html'
+AIKATU_IMG_1_URL = 'http://livedoor.blogimg.jp/aikatunews/imgs/9/9/991fe707.jpg'
+AIKATU_IMG_2_URL = 'http://livedoor.blogimg.jp/aikatunews/imgs/f/6/f6695505.jpg'
 
 describe Aistaimgcrawler::Aikatunews do
   before(:each) do
@@ -28,16 +28,16 @@ describe Aistaimgcrawler::Aikatunews do
       :headers => {content_type: 'text/html'},
       :body => File.read(SPEC_DIR+'aikatunews_html/4.html'),
     })
-    stub_request(:get, IMG_LIST_14_URL).to_return({
+    stub_request(:get, AIKATU_IMG_LIST_14_URL).to_return({
       :status => 200,
       :headers => {content_type: 'text/html'},
       :body => File.read(SPEC_DIR+'aikatunews_html/img14.html'),
     })
-    stub_request(:get, IMG_1_URL).to_return({
+    stub_request(:get, AIKATU_IMG_1_URL).to_return({
       :status => 200,
       :body => File.read(SPEC_DIR+'aikatunews_html/img1.jpg'),
     })
-    stub_request(:get, IMG_2_URL).to_return({
+    stub_request(:get, AIKATU_IMG_2_URL).to_return({
       :status => 200,
       :body => File.read(SPEC_DIR+'aikatunews_html/img2.jpg'),
     })
