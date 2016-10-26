@@ -4,7 +4,7 @@ module Aistaimgcrawler
   class Ponpokonwes < Aistaimgcrawler::Base
     attr_accessor :index_url
 
-    def initialize logger=$STDOUT, img_dir='./img/'
+    def initialize logger=Logger.new(STDOUT), img_dir='./img/'
       super logger, img_dir
       @index_url = 'http://ponpokonwes.blog.jp/archives/cat_888546.html'
     end

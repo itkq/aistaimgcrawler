@@ -4,7 +4,7 @@ module Aistaimgcrawler
   class Aikatunews < Aistaimgcrawler::Base
     attr_accessor :index_url
 
-    def initialize logger=$STDOUT, img_dir='./img/'
+    def initialize logger=Logger.new(STDOUT), img_dir='./img/'
       super logger, img_dir
       @index_url = 'http://aikatunews.livedoor.biz/archives/cat_252353.html'
     end

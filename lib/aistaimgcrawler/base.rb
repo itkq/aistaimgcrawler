@@ -1,4 +1,5 @@
 require 'mechanize'
+require 'logger'
 
 module Aistaimgcrawler
   class Base
@@ -65,9 +66,13 @@ module Aistaimgcrawler
       }.compact
     end
 
-    def get_imgs ep, thumb_flg=false
+    def get_imgs ep, size=nil, thumb_flg=false
       resources = get_img_resources(ep)
       return [] unless resources
+
+      if size.to_i > 0
+        resources = resources[0..size.to_i-1]
+      end
 
       @logger.info "get image from episode #{ep}"
       @logger.info "#{resources.size} images"
