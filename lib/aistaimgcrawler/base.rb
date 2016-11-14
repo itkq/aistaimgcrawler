@@ -1,5 +1,6 @@
 require 'mechanize'
 require 'logger'
+require 'io/console/size'
 
 module Aistaimgcrawler
   class Base
@@ -12,6 +13,7 @@ module Aistaimgcrawler
       @mech      = Mechanize.new
 
       @mech.user_agent_alias = 'Mac Firefox'
+      $stdout.sync = true
     end
 
     def get_articles
@@ -104,6 +106,7 @@ module Aistaimgcrawler
 
           succ << path
         end
+        progress_bar(i, resources.size-1)
         sleep rand(5)+1
       end
 
@@ -120,6 +123,18 @@ module Aistaimgcrawler
 
       @logger.info "#{url} ==> finished"
       true
+    end
+
+    def progress_bar(i, max = 100)
+      height, width = IO.console_size
+      i = max if i > max
+      rest_size = 1 + 5 + 1 # space + progress_num + %
+      bar_width = (width - 1) - rest_size
+      percent = i * 100.0 / max
+      bar_length = i * bar_width.to_f / max
+      bar_str = ('#' * bar_length).ljust(bar_width)
+      progress_num = '%3.1f' % percent
+      print "\r#{bar_str} #{'%5s' % progress_num}%"
     end
   end
 end
