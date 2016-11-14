@@ -1,6 +1,6 @@
 require 'mechanize'
 require 'logger'
-require 'io/console/size'
+require 'ruby-progressbar'
 
 module Aistaimgcrawler
   class Base
@@ -96,6 +96,7 @@ module Aistaimgcrawler
       end
 
       succ = []
+      pb = create_pb(resources.size-1)
       resources.each_with_index do |_url, i|
         path = dirname + format % [i+1]
         if save_img(path, _url)
@@ -106,8 +107,8 @@ module Aistaimgcrawler
 
           succ << path
         end
-        progress_bar(i, resources.size-1)
         sleep rand(5)+1
+        pb.increment
       end
 
       succ
@@ -125,16 +126,12 @@ module Aistaimgcrawler
       true
     end
 
-    def progress_bar(i, max = 100)
-      height, width = IO.console_size
-      i = max if i > max
-      rest_size = 1 + 5 + 1 # space + progress_num + %
-      bar_width = (width - 1) - rest_size
-      percent = i * 100.0 / max
-      bar_length = i * bar_width.to_f / max
-      bar_str = ('#' * bar_length).ljust(bar_width)
-      progress_num = '%3.1f' % percent
-      print "\r#{bar_str} #{'%5s' % progress_num}%"
+    def create_pb total
+      ProgressBar.create(
+        total:         total,
+        format:        '%a %B %p%% %t',
+        progress_mark: '#',
+      )
     end
   end
 end
