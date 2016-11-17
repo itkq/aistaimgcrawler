@@ -27,7 +27,7 @@ module Aistaimgcrawler
       rescue Mechanize::ResponseCodeError => e
         return nil
       end
-      page.search('div.story-img > img').attr('alt').value
+      page.search('h3.title > img').attr('alt').value
     end
 
     def get_article_url_by_episode ep
